@@ -1,0 +1,3 @@
+# Project exclude paths
+/tensquare-base/target/
+/tensquare-common/target/
