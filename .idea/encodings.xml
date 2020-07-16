@@ -3,5 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/tensquare-base/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tensquare-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tensquare-qa/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tensquare-qa/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tensquare-recruit/src/main/java" charset="UTF-8" />
   </component>
 </project>
