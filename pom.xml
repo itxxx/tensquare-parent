@@ -12,6 +12,8 @@
         <module>tensquare-base</module>
         <module>tensquare-recruit</module>
         <module>tensquare-qa</module>
+        <module>tensquare-article</module>
+        <module>tensquare-gathering</module>
     </modules>
     <packaging>pom</packaging>
 
