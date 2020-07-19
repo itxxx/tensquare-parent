@@ -13,6 +13,7 @@ import java.util.List;
 /**
  * 数据访问接口
  * @author Administrator
+ * 继承jpa默认提供一些常用的增删改查
  *
  */
 public interface ProblemDao extends JpaRepository<Problem,String>,JpaSpecificationExecutor<Problem>{
