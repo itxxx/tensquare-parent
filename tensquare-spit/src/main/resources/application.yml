@@ -7,4 +7,6 @@ data:
   mongodb:
     host: 192.168.226.128
     database: spitdb
+  redis:
+    host: 192.168.226.128
 
