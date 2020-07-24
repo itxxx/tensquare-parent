@@ -74,7 +74,7 @@ public class RecruitController {
 	public Result findSearch(@RequestBody Map searchMap , @PathVariable int page, @PathVariable int size){
 		Page<Recruit> pageList = recruitService.findSearch(searchMap, page, size);
 		return  new Result(true,StatusCode.OK,"查询成功",  new PageResult<Recruit>(pageList.getTotalElements(), pageList.getContent()) );
-	}
+	} 
 
 	/**
      * 根据条件查询
