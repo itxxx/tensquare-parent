@@ -16,6 +16,8 @@
         <module>tensquare-gathering</module>
         <module>tensquare-spit</module>
         <module>tensquare-search</module>
+        <module>tensquare-user</module>
+        <module>tensquare-sms</module>
     </modules>
     <packaging>pom</packaging>
 
