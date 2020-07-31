@@ -15,3 +15,7 @@ redis:
   host: 127.0.0.1
 rabbitmq:
   host: 127.0.0.1
+jwt:
+  config:
+    key: itxxx
+    ttl: 360000

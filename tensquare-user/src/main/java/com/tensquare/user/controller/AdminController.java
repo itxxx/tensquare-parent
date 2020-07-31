@@ -1,4 +1,5 @@
 package com.tensquare.user.controller;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,8 @@ import com.tensquare.user.service.AdminService;
 import entity.PageResult;
 import entity.Result;
 import entity.StatusCode;
+import uitl.JwtUtil;
+
 /**
  * 控制器层
  * @author Administrator
@@ -29,8 +32,28 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
-	
-	
+	@Autowired
+	private JwtUtil jwtUtil;
+
+
+	/**
+	 * 用户登陆
+	 * @return
+	 */
+	@RequestMapping(value="/login",method=RequestMethod.POST)
+	public Result login(@RequestBody Map<String,String> loginMap){
+		Admin admin =adminService.findByLoginnameAndPassword(loginMap.get("loginname"),loginMap.get("password"));
+		if(admin!=null){
+			String token = jwtUtil.createJWT(admin.getId(),admin.getLoginname(), "admin");
+			Map map=new HashMap();
+			map.put("token",token);
+			map.put("name",admin.getLoginname());//登陆名
+			return new Result(true,StatusCode.OK,"登陆成功",map);
+		}else{
+			return new Result(false,StatusCode.LOGINERROR,"用户名或密码错误");
+		}
+	}
+
 	/**
 	 * 查询全部数据
 	 * @return

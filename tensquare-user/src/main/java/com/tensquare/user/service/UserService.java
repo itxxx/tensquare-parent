@@ -9,7 +9,10 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
+import javax.servlet.http.HttpServletRequest;
 
+import ch.qos.logback.core.net.server.Client;
+import io.jsonwebtoken.Claims;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,12 +20,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 import com.tensquare.user.dao.UserDao;
 import com.tensquare.user.pojo.User;
 import uitl.IdWorker;
+import uitl.JwtUtil;
 
 /**
  * 服务层
@@ -32,17 +37,36 @@ import uitl.IdWorker;
  */
 @Service
 public class UserService {
+
 	@Autowired
 	private RedisTemplate redisTemplate;
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
-
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 	@Autowired
 	private UserDao userDao;
-	
 	@Autowired
 	private IdWorker idWorker;
+	@Autowired
+	private JwtUtil jwtUtil;
+	@Autowired
+	private HttpServletRequest request;
 
+	/**
+	 * 根据手机号和密码查询用户
+	 * @param mobile
+	 * @param password
+	 * @return
+	 */
+	public User findByMobileAndPassword(String mobile,String password){
+		User user = userDao.findByMobile(mobile);
+		if(user!=null && encoder.matches(password,user.getPassword())){
+			return user;
+		}else{
+			return null;
+		}
+	}
 
 	/**
 	 * 发送短信验证码
@@ -84,6 +108,8 @@ public class UserService {
 		user.setRegdate(new Date());//注册日期
 		user.setUpdatedate(new Date());//更新日期
 		user.setLastdate(new Date());//最后登陆日期
+		String newpassword = encoder.encode(user.getPassword());//加密后的密码
+		user.setPassword(newpassword);
 		userDao.save(user);
 
 	}
@@ -137,6 +163,9 @@ public class UserService {
 	 */
 	public void add(User user) {
 		user.setId( idWorker.nextId()+"" );
+		String newpassword=encoder.encode(user.getPassword());//加密后的密码
+		user.setPassword(newpassword);
+		user.setId( idWorker.nextId()+"" );
 		userDao.save(user);
 	}
 
@@ -153,6 +182,18 @@ public class UserService {
 	 * @param id
 	 */
 	public void deleteById(String id) {
+		String header=request.getHeader("Authorization");
+		if(header.isEmpty()){
+			throw new RuntimeException("权限不足");
+		}
+		if(!header.startsWith("Bearer")){
+			throw new RuntimeException("权限不足");
+		}
+		String token = header.substring(7);
+		Claims claims= jwtUtil.parseJWT(token);
+		if (claims==null&&!claims.get("roles").toString().equals("admin")){
+			throw new RuntimeException("权限不足");
+		}
 		userDao.deleteById(id);
 	}
 

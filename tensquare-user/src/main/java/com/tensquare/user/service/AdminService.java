@@ -11,12 +11,15 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
+import javax.servlet.http.HttpServletRequest;
 
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Service;
 import com.tensquare.user.dao.AdminDao;
 import com.tensquare.user.pojo.Admin;
 import uitl.IdWorker;
+import uitl.JwtUtil;
 
 /**
  * 服务层
@@ -36,14 +40,34 @@ public class AdminService {
 
 	@Autowired
 	private AdminDao adminDao;
-	
 	@Autowired
 	private IdWorker idWorker;
+	@Autowired
+	BCryptPasswordEncoder encoder;
+	@Autowired
+	HttpServletRequest request;
+	@Autowired
+	JwtUtil jwtUtil;
 
 	/**
-	 * 查询全部列表
+	 * 根据登陆名和密码查询
+	 * @param loginname
+	 * @param password
 	 * @return
 	 */
+	public Admin findByLoginnameAndPassword(String loginname, String password){
+		Admin admin = adminDao.findByLoginname(loginname);
+		if (admin != null && encoder.matches(password, admin.getPassword())) {
+			return admin;
+		}
+		return null;
+	}
+
+
+		/**
+         * 查询全部列表
+         * @return
+         */
 	public List<Admin> findAll() {
 		return adminDao.findAll();
 	}
@@ -88,6 +112,8 @@ public class AdminService {
 	 */
 	public void add(Admin admin) {
 		admin.setId( idWorker.nextId()+"" );
+		String newpassword=encoder.encode(admin.getPassword());//加密后的密码
+		admin.setPassword(newpassword);
 		adminDao.save(admin);
 	}
 
@@ -104,6 +130,18 @@ public class AdminService {
 	 * @param id
 	 */
 	public void deleteById(String id) {
+		String header=request.getHeader("Authorization");
+		if(header.isEmpty()){
+			throw new RuntimeException("权限不足");
+		}
+		if(!header.startsWith("Bearer")){
+			throw new RuntimeException("权限不足");
+		}
+		String token = header.substring(7);
+		Claims claims= jwtUtil.parseJWT(token);
+		if (claims==null&&!claims.get("roles").toString().equals("admin")){
+			throw new RuntimeException("权限不足");
+		}
 		adminDao.deleteById(id);
 	}
 

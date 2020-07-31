@@ -1,15 +1,9 @@
 package com.tensquare.user.controller;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.tensquare.user.pojo.User;
 import com.tensquare.user.service.UserService;
@@ -17,6 +11,8 @@ import com.tensquare.user.service.UserService;
 import entity.PageResult;
 import entity.Result;
 import entity.StatusCode;
+import uitl.JwtUtil;
+
 /**
  * 控制器层
  * @author Administrator
@@ -29,6 +25,21 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+
+	/**
+	 * 用户登陆
+	 * @return
+	 */
+	@RequestMapping(value="/login",method=RequestMethod.POST)
+	public Result login(@RequestBody User loginuser){
+		User user = userService.findByMobileAndPassword(loginuser.getMobile(),loginuser.getPassword());
+		if(user!=null){
+			return new Result(true,StatusCode.OK,"登陆成功");
+		}else{
+			return new Result(false,StatusCode.LOGINERROR,"用户名或密码错误");
+		}
+	}
 
 	/**
 	 * 发送短信验证码
