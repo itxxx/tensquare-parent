@@ -49,8 +49,6 @@ public class UserService {
 	@Autowired
 	private IdWorker idWorker;
 	@Autowired
-	private JwtUtil jwtUtil;
-	@Autowired
 	private HttpServletRequest request;
 
 	/**
@@ -182,16 +180,8 @@ public class UserService {
 	 * @param id
 	 */
 	public void deleteById(String id) {
-		String header=request.getHeader("Authorization");
-		if(header.isEmpty()){
-			throw new RuntimeException("权限不足");
-		}
-		if(!header.startsWith("Bearer")){
-			throw new RuntimeException("权限不足");
-		}
-		String token = header.substring(7);
-		Claims claims= jwtUtil.parseJWT(token);
-		if (claims==null&&!claims.get("roles").toString().equals("admin")){
+		String token = (String) request.getAttribute("claims_admin");
+		if(token==null||token.equals("")){
 			throw new RuntimeException("权限不足");
 		}
 		userDao.deleteById(id);

@@ -1,4 +1,5 @@
 package com.tensquare.user.controller;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,8 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-
+	@Autowired
+	private JwtUtil jwtUtil;
 
 	/**
 	 * 用户登陆
@@ -35,7 +37,11 @@ public class UserController {
 	public Result login(@RequestBody User loginuser){
 		User user = userService.findByMobileAndPassword(loginuser.getMobile(),loginuser.getPassword());
 		if(user!=null){
-			return new Result(true,StatusCode.OK,"登陆成功");
+			String token=jwtUtil.createJWT(loginuser.getId(),loginuser.getMobile(),"user");
+			Map map = new HashMap();
+			map.put("token", token);
+			map.put("roles", "user");
+			return new Result(true,StatusCode.OK,"登陆成功",map);
 		}else{
 			return new Result(false,StatusCode.LOGINERROR,"用户名或密码错误");
 		}

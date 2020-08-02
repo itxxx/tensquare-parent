@@ -20,5 +20,11 @@
 			<artifactId>tensquare-common</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+      <dependency>
+          <groupId>com.tensquare</groupId>
+          <artifactId>tensquare-user</artifactId>
+          <version>1.0-SNAPSHOT</version>
+          <scope>compile</scope>
+      </dependency>
   </dependencies>  
 </project>
