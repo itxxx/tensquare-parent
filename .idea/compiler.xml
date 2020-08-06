@@ -7,13 +7,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="tensquare-user" />
-        <module name="tensquare-gathering" />
+        <module name="tensquare-eureka" />
         <module name="tensquare-article" />
+        <module name="tensquare-search" />
         <module name="tensquare-recruit" />
         <module name="tensquare-base" />
         <module name="tensquare-sms" />
         <module name="tensquare_spit" />
-        <module name="tensquare-search" />
+        <module name="tensquare-gathering" />
         <module name="tensquare-qa" />
         <module name="tensquare-common" />
         <module name="tensquare-spit" />
@@ -29,6 +30,7 @@
       <module name="tensquare-article" options="-parameters" />
       <module name="tensquare-base" options="-parameters" />
       <module name="tensquare-common" options="-parameters" />
+      <module name="tensquare-eureka" options="-parameters" />
       <module name="tensquare-gathering" options="-parameters" />
       <module name="tensquare-qa" options="-parameters" />
       <module name="tensquare-recruit" options="-parameters" />
