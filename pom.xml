@@ -19,6 +19,7 @@
         <module>tensquare-user</module>
         <module>tensquare-sms</module>
         <module>tensquare-eureka</module>
+        <module>tensquare-friend</module>
     </modules>
     <packaging>pom</packaging>
 
