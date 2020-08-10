@@ -9,9 +9,9 @@ spring:
         git:
           uri: https://gitee.com/itxxx/tensquare-config.git
   rabbitmq:
-    host: 127.0.0.1
+    host: 192.168.226.129
 management: #暴露触发消息总线的地址
   endpoints:
     web:
       exposure:
-        include: bus‐refresh
+        include: bus-refresh

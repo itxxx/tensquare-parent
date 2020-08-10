@@ -15,7 +15,7 @@ public interface FriendDao extends JpaRepository<Friend,String> {
      * @param friendid
      * @return
      */
-    @Query(value = "select count(f) from Friend f where f.userid=?1 and f.friendid=?2",nativeQuery = true)
+    @Query(value = "select count(*) from tb_friend f where f.userid=?1 and f.friendid=?2",nativeQuery = true)
     public int selectCount(String userid,String friendid);
     /**
      * 更新为互相喜欢
@@ -23,7 +23,7 @@ public interface FriendDao extends JpaRepository<Friend,String> {
      * @param friendid
      */
     @Modifying
-    @Query(value ="update Friend f set f.islike=?3 where f.userid=?1 and f.friendid=?2",nativeQuery = true)
+    @Query(value ="update tb_friend f set f.islike=?3 where f.userid=?1 and f.friendid=?2",nativeQuery = true)
     public void updateLike(String userid,String friendid,String islike);
 
     /**
@@ -32,6 +32,6 @@ public interface FriendDao extends JpaRepository<Friend,String> {
      * @param friendid
      */
     @Modifying
-    @Query("delete from Friend f where f.userid=?1 and f.friendid=?2")
+    @Query(value ="delete from tb_friend f where f.userid=?1 and f.friendid=?2",nativeQuery = true)
     public void deleteFriend(String userid,String friendid);
 }

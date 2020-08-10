@@ -27,7 +27,7 @@ public class FriendController {
      */
     @RequestMapping(value="/like/{friendid}/{type}",method= RequestMethod.PUT)
     public Result addFriend(@PathVariable String friendid , @PathVariable String type){
-        Claims claims=(Claims)request.getAttribute("user_claims");
+        Claims claims=(Claims)request.getAttribute("claims_user");
         if(claims==null){
             return new Result(false, StatusCode.ACCESSERROR,"无权访问");
         }

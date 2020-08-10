@@ -13,9 +13,9 @@ import uitl.JwtUtil;
 @EnableEurekaClient
 @EnableDiscoveryClient
 @EnableFeignClients
-public class Application {
+public class FriendApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(FriendApplication.class, args);
 	}
 	@Bean
 	public IdWorker idWorkker(){

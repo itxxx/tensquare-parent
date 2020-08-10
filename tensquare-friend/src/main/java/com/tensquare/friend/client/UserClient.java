@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /**
  * 用户客户端
  */
-@FeignClient("tensquare‐user")
+@FeignClient("tensquare-user")
 public interface UserClient {
     /**
      * 增加粉丝数
